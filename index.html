@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ocular Motility & Kinematics Comprehensive 50-Question Quiz</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #3b82f6;
+      --background: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --correct-bg: #dcfce7;
+      --correct-border: #16a34a;
+      --incorrect-bg: #fee2e2;
+      --incorrect-border: #dc2626;
+      --neutral-border: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--background);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px 12px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 24px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    header h1 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .scoreboard {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      border: 1px solid var(--neutral-border);
+    }
+
+    .card-header {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+
+    .q-number {
+      color: var(--primary-light);
+      margin-right: 6px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      background: #f1f5f9;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--text);
+      transition: all 0.15s ease-in-out;
+    }
+
+    .option-btn:hover:not([disabled]) {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .option-letter {
+      font-weight: 700;
+      min-width: 22px;
+    }
+
+    .option-btn.selected-correct {
+      background-color: var(--correct-bg);
+      border-color: var(--correct-border);
+      color: #14532d;
+    }
+
+    .option-btn.selected-incorrect {
+      background-color: var(--incorrect-bg);
+      border-color: var(--incorrect-border);
+      color: #7f1d1d;
+    }
+
+    .option-btn.correct-reveal {
+      border: 2px dashed var(--correct-border);
+      background-color: #f0fdf4;
+      font-weight: 600;
+    }
+
+    .explanation-box {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .explanation-box.correct {
+      background-color: #f0fdf4;
+      border-left: 5px solid var(--correct-border);
+      display: block;
+    }
+
+    .explanation-box.incorrect {
+      background-color: #fef2f2;
+      border-left: 5px solid var(--incorrect-border);
+      display: block;
+    }
+
+    .explanation-box strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .reset-bar {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .reset-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .reset-btn:hover {
+      background-color: var(--primary-light);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Ocular Motility &amp; Kinematics Quiz</h1>
+    <p>50 Comprehensive Board-Style Questions (EOM Basics, Kinematics, VOR, &amp; OKN)</p>
+  </header>
+
+  <div class="scoreboard" id="scoreboard">
+    <span>Questions Answered: <span id="answered-count">0</span> / 50</span>
+    <span>Score: <span id="score-display">0</span>% (<span id="correct-count">0</span> correct)</span>
+  </div>
+
+  <div id="quiz-container"></div>
+
+  <div class="reset-bar">
+    <button class="reset-btn" onclick="resetQuiz()">Reset All Questions</button>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  {
+    q: "Which cranial nerve innervates the muscle whose primary diagnostic action field is depression in 54° adduction?",
+    options: [
+      "Cranial Nerve IV (Trochlear nerve)",
+      "Cranial Nerve III (Oculomotor nerve, inferior division)",
+      "Cranial Nerve VI (Abducens nerve)",
+      "Cranial Nerve III (Oculomotor nerve, superior division)"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: The superior oblique's diagnostic action field is depression when adducted ~54°, and it is innervated by CN IV (Trochlear). B is incorrect because CN III inferior division innervates MR, IR, and IO. C is incorrect because CN VI innervates the LR. D is incorrect because the superior division innervates SR and levator palpebrae superioris."
+  },
+  {
+    q: "Which extraocular muscle originates from the anterior maxilla rather than the annulus of Zinn?",
+    options: [
+      "Inferior rectus",
+      "Inferior oblique",
+      "Superior oblique",
+      "Medial rectus"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: The inferior oblique is the only extraocular muscle with an anatomical origin anterior to the equator on the maxilla. A, C, and D are incorrect because all four rectus muscles originate at the common tendinous ring of Zinn, and the superior oblique anatomically originates from the lesser wing of the sphenoid at the orbital apex."
+  },
+  {
+    q: "According to the Spiral of Tillaux, which rectus muscle inserts furthest from the corneal limbus?",
+    options: [
+      "Medial rectus",
+      "Inferior rectus",
+      "Superior rectus",
+      "Lateral rectus"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: In the Spiral of Tillaux, insertions proceed from closest to farthest from the limbus in a clockwise pattern (OD): MR (5.3 mm/5.5 mm), IR (6.5-6.8 mm), LR (6.9 mm), and SR (7.7-7.9 mm). SR is the furthest posterior of all rectus insertions."
+  },
+  {
+    q: "What is the primary action of the superior rectus muscle?",
+    options: [
+      "Intorsion (incyclotorsion)",
+      "Adduction",
+      "Extorsion (excyclotorsion)",
+      "Elevation"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Elevation is the primary action of the superior rectus. Intorsion (A) is its secondary action, and adduction (B) is its tertiary action (SINRAD). Extorsion (C) is performed by inferior muscles."
+  },
+  {
+    q: "Sherrington's Law of Reciprocal Innervation dictates that during right gaze:",
+    options: [
+      "The right lateral rectus contracts while the right medial rectus relaxes",
+      "The right lateral rectus and left medial rectus receive equal innervation",
+      "The left lateral rectus contracts while the right lateral rectus relaxes",
+      "Both medial recti contract simultaneously"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Sherrington's Law states that when an agonist contracts, its antagonist within the same eye must receive an equal and reciprocal decrease in innervation (they 'share' the eye: RLR contracts, RMR relaxes). B describes Hering's Law of Equal Innervation. C and D describe combinations across different eyes or vergences."
+  },
+  {
+    q: "Which law explains why the non-paretic eye exhibits an exaggerated secondary deviation when the paretic eye fixates?",
+    options: [
+      "Donder's Law",
+      "Hering's Law of Equal Innervation",
+      "Sherrington's Law of Reciprocal Innervation",
+      "Listing's Law"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: Hering's Law states that yoked muscles receive equal innervation. If a paretic eye requires increased neurological drive to hold fixation, that same excess drive is sent to the normal yoked muscle of the fellow eye, generating a larger secondary deviation. A and D relate to ocular torsion and 3D kinematics. C deals with antagonists within the same eye."
+  },
+  {
+    q: "During levoversion, which pair of muscles acts as contralateral yoked agonists?",
+    options: [
+      "Right lateral rectus and left medial rectus",
+      "Right medial rectus and left medial rectus",
+      "Right medial rectus and left lateral rectus",
+      "Right superior rectus and left inferior oblique"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: Levoversion is version movement of both eyes to the left. The yoked muscles that look left are the Right Medial Rectus and the Left Lateral Rectus. A describes dextroversion (looking right). B is convergence. D is looking up and to the right."
+  },
+  {
+    q: "Which structure traverses both the superior orbital fissure and the common tendinous ring of Zinn?",
+    options: [
+      "Trochlear nerve (CN IV)",
+      "Frontal nerve",
+      "Superior ophthalmic vein",
+      "Nasociliary nerve"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Structures passing through both the SOF and the tendinous ring of Zinn follow the mnemonic 'NOA' (Nasociliary, Oculomotor, Abducens). A, B, and C pass through the SOF above the ring of Zinn (mnemonic 'LOFT' / SOV: Lacrimal, Ophthalmic vein, Frontal, Trochlear)."
+  },
+  {
+    q: "A lesion localized to the left medial longitudinal fasciculus (MLF) results in which classic clinical presentation?",
+    options: [
+      "Failure of the left eye to adduct in right gaze, with abducting nystagmus of the right eye",
+      "Failure of the right eye to adduct in left gaze, with abducting nystagmus of the left eye",
+      "Complete paralysis of both lateral recti during bilateral horizontal gaze",
+      "Loss of convergence with preserved lateral horizontal version conjugate movements"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: An internuclear ophthalmoplegia (INO) is named for the side of the adduction deficit. The left MLF carries the signal from the right CN VI nucleus to the left CN III medial rectus subnucleus; therefore, a left MLF lesion causes left eye adduction failure during right gaze, with compensatory abducting nystagmus in the right eye (Hering's Law). Convergence is preserved because CN III and the midbrain convergence center are intact."
+  },
+  {
+    q: "Why is convergence preserved in an isolated internuclear ophthalmoplegia (INO)?",
+    options: [
+      "Convergence is innervated exclusively by the abducens nerve",
+      "The MLF is not required for convergence inputs to reach the CN III complex",
+      "The lateral rectus mediates near binocular fusion",
+      "Convergence impulses travel along the ascending tract of Deiters only"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: The MLF specifically carries internuclear conjugate horizontal version signals from the contralateral abducens nucleus to the medial rectus subnucleus. Supranuclear convergence inputs target CN III directly without relying on the MLF pathway. A is incorrect because CN III innervates the MR. C is incorrect because MR mediates convergence."
+  },
+  {
+    q: "Which extraocular muscle contains the highest proportion of Singly Innervated Fibers (SIFs) in its orbital layer?",
+    options: [
+      "Only the levator palpebrae superioris",
+      "Only multiply innervated fibers (MIFs) populate this region",
+      "All recti/obliques have an orbital layer comprised of approximately 80% SIFs",
+      "Extraocular muscles contain zero twitch fibers"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: As detailed in the lecture slides, the orbital layer of EOMs is composed of ~80% Singly Innervated Fibers (SIFs) and 20% Multiply Innervated Fibers (MIFs). SIFs are fast-twitch fibers capable of rapid recruitment."
+  },
+  {
+    q: "Rotation of the eye purely about the transverse (Y-axis in classic mechanics / X-axis in Fick's notation) produces which ocular movement?",
+    options: [
+      "Pure incyclotorsion or excyclotorsion",
+      "Pure abduction or adduction",
+      "Simultaneous diagonal gaze and cyclo-rotation",
+      "Pure elevation or depression"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: The transverse axis crosses horizontally through the nasal and temporal poles of the globe; rotating about this axis moves the visual axis vertically (pure elevation or depression). A is rotation about the parasagittal axis. B is rotation about the vertical Z-axis."
+  },
+  {
+    q: "A patient looking up and to the right is in which gaze position classification?",
+    options: [
+      "Tertiary position",
+      "Primary position",
+      "Secondary position",
+      "Cardinal zero position"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Primary position is looking straight ahead. Secondary positions involve rotation around only one axis (purely up, down, left, or right). Tertiary positions involve rotation around two axes (e.g., looking up and right, down and left)."
+  },
+  {
+    q: "Which statement accurately differentiates a phoria from a tropia?",
+    options: [
+      "A phoria occurs under monocular conditions with fusion preserved, while a tropia cannot be measured with prism",
+      "A phoria is a latent misalignment kept in check by binocular fusion, whereas a tropia is a manifest deviation present even with fusion attempted",
+      "A tropia is always non-comitant, while a phoria is always comitant",
+      "A phoria is elicited only with unilateral cover test, whereas a tropia requires alternate occlusion"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: A phoria is a latent deviation that manifests only when binocular fusion is broken (e.g., alternate cover test, Maddox rod). A tropia is a manifest strabismus present under binocular viewing conditions (detected by unilateral cover-uncover test). C and D are clinically false."
+  },
+  {
+    q: "A non-comitant strabismic deviation is defined clinically by a difference between gazes of at least:",
+    options: [
+      "1 prism diopter",
+      "2 prism diopters",
+      "5 prism diopters",
+      "20 prism diopters"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: By definition in the motility lecture slides, a non-comitant strabismus exhibits a deviation that varies significantly (greater than 5 prism diopters: >5Δ) with changes in gaze position."
+  },
+  {
+    q: "Which clinical phenomenon is characterized by an exotropia that increases significantly in upward gaze compared to downward gaze?",
+    options: [
+      "A-pattern esotropia",
+      "V-pattern esotropia",
+      "A-pattern exotropia",
+      "V-pattern exotropia"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: In V-pattern exotropia, divergence (exotropia) is greater in upgaze and less in downgaze. (Think of the wide arms of the 'V' pointing upward). In A-pattern exotropia, exotropia is greater in downgaze."
+  },
+  {
+    q: "What muscle imbalance is typically responsible for a V-pattern exotropia?",
+    options: [
+      "Overaction of the inferior obliques or underaction of the superior recti",
+      "Overaction of the superior obliques or underaction of the inferior recti",
+      "Overaction of the medial recti in downgaze",
+      "Underaction of both horizontal recti exclusively"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Inferior obliques elevate and have a tertiary action of abduction. Overaction of the inferior obliques creates excessive abduction in upgaze. Similarly, underaction of superior recti (whose tertiary action is adduction) fails to keep the eyes adducted in upgaze, promoting a V-pattern exotropia."
+  },
+  {
+    q: "An A-pattern esotropia is classically driven by which extraocular muscle dysfunction?",
+    options: [
+      "Overaction of the inferior obliques",
+      "Overaction of the superior recti (tertiary adduction) or underaction of the inferior obliques (tertiary abduction)",
+      "Overaction of the superior obliques (tertiary abduction)",
+      "Primary fibrosis of the lateral rectus muscle"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: In A-pattern esotropia, the esotropia is greatest in upgaze (the narrow peak of the 'A'). This is driven by overaction of the superior recti (excess tertiary adduction in upgaze) and/or underaction of the inferior obliques (deficient tertiary abduction in upgaze)."
+  },
+  {
+    q: "Which ocular motility law states that the torsional orientation of the eye in any tertiary position is independent of the kinematic path taken to get there ('Donder's don't care')?",
+    options: [
+      "Listing's Law",
+      "Sherrington's Law",
+      "Donder's Law",
+      "Hering's Law"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: Donder's Law states that for any given position of gaze, the amount of ocular torsion is determined solely by the final horizontal and vertical coordinates of the globe in the orbit, regardless of the trajectory or sequence taken (commutative property: order does not matter)."
+  },
+  {
+    q: "Which property is TRUE regarding Listing's Law?",
+    options: [
+      "It states that all eye rotations can be achieved by moving about axes confined to a single plane perpendicular to the line of sight when the eye is in primary position",
+      "It is fully commutative (the order of angular rotation steps does not matter)",
+      "It applies only to rotatory vestibular nystagmus in complete darkness",
+      "Listing's plane contains the parasagittal X-axis and excludes vertical movements"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Listing's Law states that any eye position can be described by rotation about an axis that lies within a specific frontal plane (Listing's plane) containing the transverse and vertical axes, perpendicular to the visual axis in primary position. It is non-commutative (order matters: 'List the order')."
+  },
+  {
+    q: "What is the primary sensory organ located within the ampulla of each semicircular canal that detects angular acceleration?",
+    options: [
+      "Macula",
+      "Crista ampullaris",
+      "Striola",
+      "Otoconia"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: The crista ampullaris is the dynamic sensory crest located in the ampulla of the semicircular canals, covered by the gelatinous cupula. The macula (A) is the sensory organ of the otolith organs (utricle and saccule), which contains the striola (C) and otoconia (D)."
+  },
+  {
+    q: "The utricle and saccule are specialized to detect which type of motion?",
+    options: [
+      "Dynamic angular rotation of the head",
+      "High-frequency optokinetic drift",
+      "Linear translation and static gravitational tilt",
+      "Constant-velocity sustained yaw rotation in the dark"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: The utricle and saccule (otolith organs) contain gravity-sensitive otoconia that detect linear acceleration (surge, heave, bob) and static tilt relative to gravity. Angular rotation (A, D) is detected by the semicircular canals."
+  },
+  {
+    q: "What is the technical kinematic term for horizontal, side-to-side linear translation of the body/head?",
+    options: [
+      "Surge",
+      "Pitch",
+      "Bob",
+      "Heave"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Heave is horizontal side-to-side translation. Surge is forward/backward (fore-aft) linear translation. Bob is vertical up-and-down translation. Pitch is vertical rotation."
+  },
+  {
+    q: "Forward/backward (fore and aft) linear translation of the body is formally designated as:",
+    options: [
+      "Surge",
+      "Yaw",
+      "Roll",
+      "Heave"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Surge corresponds to linear translation along the anterior-posterior axis (fore and aft). Yaw is horizontal rotation ('shaking head no'). Roll is torsional rotation ('tilting ear to shoulder'). Heave is side-to-side translation."
+  },
+  {
+    q: "When the head rotates to the right, how does the endolymph fluid within the horizontal semicircular canals behave?",
+    options: [
+      "Fluid moves in the same direction as head rotation, hyperpolarizing both sides",
+      "Fluid lags behind due to inertia, deflecting the right cupula toward the kinocilia and depolarizing the right vestibular nerve",
+      "Fluid stops moving immediately upon acceleration",
+      "Fluid flows identically toward the ampullae on both left and right sides simultaneously"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: Due to inertia, endolymph lags behind head rotation, moving relatively to the left. In the right horizontal canal, this ampullopetal flow displaces stereocilia toward the kinocilium, causing depolarization and increased firing rate of the right vestibular nerve. Simultaneously, fluid moves away from the ampulla on the left, decreasing firing."
+  },
+  {
+    q: "Hair cells depolarize and increase their action potential firing rate when:",
+    options: [
+      "Stereocilia bend away from the kinocilium",
+      "Endolymph is drained into the perilymphatic space",
+      "Stereocilia bend toward the kinocilium",
+      "The cupula achieves rotational equilibrium after 1 minute"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: Deflection of stereocilia toward the taller kinocilium opens mechanically gated cation channels, depolarizing the hair cell and increasing vestibular nerve firing. Bending away causes hyperpolarization."
+  },
+  {
+    q: "Which brainstem nucleus receives the primary direct excitatory afferent projections from the horizontal semicircular canal in the horizontal VOR pathway?",
+    options: [
+      "Superior vestibular nucleus (SVN)",
+      "Inferior olivary nucleus",
+      "Pretectal nucleus",
+      "Medial vestibular nucleus (MVN)"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Horizontal canal afferents synapse primarily in the ipsilateral Medial Vestibular Nucleus (MVN). Vertical canals project primarily through the Superior Vestibular Nucleus (SVN)."
+  },
+  {
+    q: "Trace the classical excitatory VOR pathway following a rapid head rotation to the right:",
+    options: [
+      "Right HC → Right MVN → crosses to Left CN VI nucleus → Left Lateral Rectus & crosses back via MLF to Right CN III nucleus (Right MR)",
+      "Right HC → Left MVN → Left CN VI nucleus → Left MR & Right LR",
+      "Right HC → Right SVN → Left CN III nucleus → Right IO & Left SR",
+      "Right HC → Right LVN → Ascending Tract of Deiters → Contralateral SO"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Right head turn excites the Right Horizontal Canal (RHC) → ipsilateral Right MVN → crosses midline to Left Abducens (CN VI) nucleus. The abducens nucleus directly innervates the Left Lateral Rectus and sends interneurons across via the Right MLF to the Right Oculomotor (CN III) nucleus to innervate the Right Medial Rectus, causing conjugate leftward gaze opposite head motion."
+  },
+  {
+    q: "Vertical VOR pathways originating from the anterior semicircular canals utilize which vestibular nucleus rather than the medial vestibular nucleus?",
+    options: [
+      "Lateral vestibular nucleus exclusively",
+      "Superior vestibular nucleus (SVN)",
+      "Spinal vestibular nucleus",
+      "Nucleus prepositus hypoglossi"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: As emphasized in the vertical VOR lecture, vertical canal pathways utilize the Superior Vestibular Nucleus (SVN) rather than the MVN to project through the MLF and brachium conjunctivum to vertical motor nuclei."
+  },
+  {
+    q: "Pure isolated stimulation of the Right Anterior Canal (RAC) activates which pair of extraocular muscles?",
+    options: [
+      "Right superior rectus and Left superior rectus",
+      "Right inferior rectus and Left superior oblique",
+      "Right superior rectus and Left inferior oblique",
+      "Right superior oblique and Left inferior rectus"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: Activation of a vertical canal stimulates the superior muscle of the same eye and the inferior muscle of the opposite eye ('Right canals use right superior and left inferior'). For the Right Anterior Canal (RAC, an elevator canal), the muscles are Right Superior Rectus (RSR) and Left Inferior Oblique (LIO)."
+  },
+  {
+    q: "A head tilt with the right ear toward the right shoulder excites which combination of semicircular canals?",
+    options: [
+      "Right anterior canal and Left posterior canal",
+      "Left anterior canal and Left posterior canal",
+      "Right horizontal canal and Left horizontal canal",
+      "Right anterior canal and Right posterior canal"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Tilting the head toward the right shoulder activates all vertical canals on the right side: the Right Anterior Canal (RAC) and Right Posterior Canal (RPC). This produces compensatory counterclockwise/leftward ocular torsion."
+  },
+  {
+    q: "During caloric testing, irrigating the right external auditory canal with COLD water results in:",
+    options: [
+      "Slow phase to the right, fast phase (nystagmus) beating to the left (opposite ear)",
+      "Slow phase to the left, fast phase beating to the right (same ear)",
+      "Pure vertical downbeat nystagmus",
+      "Suppression of all vestibular responses bilaterally"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: The mnemonic COWS (Cold Opposite, Warm Same) designates the direction of the FAST (nystagmus) phase. Cold water mimics a destructive lesion on that side, decreasing firing; eyes slowly drift toward the irrigated side (right), and the fast corrective saccade beats OPPOSITE (to the left)."
+  },
+  {
+    q: "Irrigating the left ear with WARM water causes:",
+    options: [
+      "Slow drift to the right, fast beating nystagmus to the right",
+      "Slow drift to the right, fast corrective phase (nystagmus) to the left (same ear)",
+      "Slow drift to the left, fast beating nystagmus to the right",
+      "Bilateral pupillary constriction and convergence spasm"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: COWS: Warm irrigation simulates excitation/stimulation of the canal. Warm water in the left ear drives slow drift away from that ear (to the right); the fast corrective phase snaps back in the SAME direction as the tested ear (to the left)."
+  },
+  {
+    q: "A patient suffers an acute, complete destructive peripheral vestibular lesion of the entire LEFT inner ear. What type of spontaneous nystagmus is expected?",
+    options: [
+      "Left-beating horizontal-torsional nystagmus",
+      "Pure downbeating nystagmus",
+      "Right-beating horizontal-torsional nystagmus (fast phase away from lesion)",
+      "Torsional counterclockwise nystagmus with no horizontal component"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: Acute peripheral loss on the left leaves the right inner ear firing unopposed. Unopposed right vestibular tone drives eyes in a slow drift to the left. The fast corrective phase snaps back to the right. Fast phase always beats AWAY from a unilateral destructive vestibular lesion (right-beating)."
+  },
+  {
+    q: "A midline lesion of the cerebellum disrupts cerebellar inhibition of the anterior semicircular canals. What classic nystagmus results?",
+    options: [
+      "Upbeat nystagmus with clockwise torsion",
+      "Horizontal jerk nystagmus beating toward the lesion",
+      "Periodic alternating horizontal nystagmus",
+      "Downbeat nystagmus (slow drift upward, fast beat downward)"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Cerebellar pathways normally exert tonic inhibition on the anterior canals. Loss of this cerebellar clamp causes relative overactivity of the anterior canals, driving the eyes in a slow upward drift. The corrective fast phase is downward, producing classic downbeat nystagmus."
+  },
+  {
+    q: "What is the ideal gain of the vestibulo-ocular reflex (eye velocity / head velocity) in normal daylight?",
+    options: [
+      "-1.0 (eyes move at equal speed in opposite direction of head)",
+      "0.0 (eyes remain stationary relative to head)",
+      "+1.0 (eyes move in identical speed and direction as head)",
+      "-0.5 (eyes compensate for half of head velocity)"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Ideally, eye velocity matches head velocity perfectly with a 180° phase inversion, represented by a gain of -1.0. In darkness, VOR gain drops slightly to ~ -0.9."
+  },
+  {
+    q: "How does spectacle correction for high hyperopia alter the required VOR gain?",
+    options: [
+      "It has no impact on gain because only contact lenses alter optical demands",
+      "Spectacle magnification increases the angular displacement of retinal images, requiring an increased VOR gain (>1.0)",
+      "Plus lenses induce base-in prism that lowers required gain to -0.4",
+      "It completely eliminates the slow phase of VOR"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: Spectacle lenses sit away from the eye at a vertex distance. High plus lenses (hyperopia) produce optical magnification, meaning the visual scene shifts faster across the retina during head rotation, requiring the visual system to adapt by increasing its VOR gain. Myopic spectacles decrease gain, while contact lenses produce no change."
+  },
+  {
+    q: "A patient presents with a right hypertropia. Based on Step 1 of the Bielschowsky-Parks Three-Step, which four muscles could potentially be weak?",
+    options: [
+      "RSR, RIO, LSR, LIO",
+      "RLR, RMR, LLR, LMR",
+      "RIR, RSO, LSR, LIO",
+      "RIR, RSO, LIR, LSO"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: In right hypertropia, either the right eye is abnormally high or the left eye is abnormally low. The weak muscle must be a depressor of the right eye (RIR, RSO) or an elevator of the left eye (LSR, LIO)."
+  },
+  {
+    q: "In a patient with right hypertropia that worsens on LEFT gaze and worsens on RIGHT head tilt, which muscle is weak?",
+    options: [
+      "Right superior rectus",
+      "Left inferior rectus",
+      "Left inferior oblique",
+      "Right superior oblique"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Step 1 (Right Hyper): RIR, RSO, LSR, LIO. Step 2 (Worse on Left Gaze): Isolates left recti and right obliques → eliminates RIR & LSR, leaving RSO and LIO. Step 3 (Worse on Right Head Tilt): Right head tilt isolates right superiors (RSR, RSO) and left inferiors (LIR, LIO) → isolates RSO. The weak muscle is the Right Superior Oblique (Right CN IV palsy)."
+  },
+  {
+    q: "A patient presents with a left hypertropia that worsens on RIGHT gaze and worsens on LEFT head tilt. Which extraocular muscle is paretic?",
+    options: [
+      "Left superior oblique (LSO)",
+      "Left superior rectus (LSR)",
+      "Right inferior rectus (RIR)",
+      "Left inferior rectus (LIR)"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: Step 1 (Left Hyper): LIR, LSO, RSR, RIO. Step 2 (Worse on Right Gaze): Isolates right recti and left obliques → leaves RSR and LSO. Step 3 (Worse on Left Head Tilt): Left head tilt isolates left superiors (LSR, LSO) and right inferiors (RIR, RIO) → isolates LSO. The weak muscle is the Left Superior Oblique."
+  },
+  {
+    q: "A patient presents with an anomalous head posture consisting of a LEFT head tilt, chin down, and face turn to the left. This posture is classic compensation for a palsy of which muscle?",
+    options: [
+      "Left superior oblique",
+      "Right superior oblique (RSO)",
+      "Right inferior rectus",
+      "Left lateral rectus"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: Patients tilt/turn their head away from the action field of the paralyzed muscle to achieve fusion ('tilt away from an SO palsy'). A Right SO palsy worsens on right tilt and left gaze; thus, the patient adopts a compensatory LEFT head tilt, right face turn (or chin tucked down) to minimize diplopia."
+  },
+  {
+    q: "Forced duction testing is performed on an eye that cannot elevate in adduction. The examiner cannot physically move the globe upward with forceps. What does this result signify?",
+    options: [
+      "A neurogenic cranial nerve III palsy",
+      "Myasthenia gravis without mechanical restriction",
+      "A positive forced duction test indicating mechanical restriction (e.g., Brown syndrome or trapped muscle)",
+      "A negative forced duction test indicating an innervational nuclear defect"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: When the examiner encounters physical resistance and cannot move the globe into the restricted field, the test is POSITIVE, diagnosing mechanical restriction (fibrosed/shortened tendon in Brown syndrome, entrapped IR in blowout fracture, or enlarged muscle belly in Thyroid Eye Disease). If the eye moves freely, it is negative (palsy/nerve issue)."
+  },
+  {
+    q: "During Thyroid Eye Disease (TED), what is the most common extraocular muscle to be restricted/enlarged, and what part of the muscle is typically spared?",
+    options: [
+      "Lateral rectus; belly is spared",
+      "Superior oblique; tendon is spared",
+      "Medial rectus; origin is spared",
+      "Inferior rectus; tendon is spared"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Thyroid Eye Disease follows the mnemonic 'I'M SLOW' (Inferior, Medial, Superior, Lateral, Obliques). The Inferior Rectus is most frequently affected, producing restricted upgaze. A classic CT imaging hallmark of TED is muscle belly enlargement with tendon sparing."
+  },
+  {
+    q: "When a person is rotated continuously at constant velocity in a swivel chair in complete darkness, what happens to their rotatory vestibular nystagmus?",
+    options: [
+      "It decays and completely disappears within approximately one minute",
+      "It persists indefinitely until the chair is stopped",
+      "It immediately converts into optokinetic after-nystagmus (OKAN)",
+      "It beats continuously in the direction opposite to the spin"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: In constant-velocity rotation, the endolymph catches up with the canal walls and friction returns the cupula to its resting position within ~15-30 seconds (cupula time constant = 5 sec; vestibular nerve velocity storage = 15 sec). Rotatory vestibular nystagmus decays completely within one minute in darkness. OKN cannot sustain it without light."
+  },
+  {
+    q: "During continuous constant-velocity whole-body rotation to the right in full light, why does nystagmus persist beyond the first minute?",
+    options: [
+      "Vestibular endolymph continues accelerating indefinitely",
+      "Optokinetic Nystagmus (OKN) takes over and sustains the nystagmus",
+      "The saccule overrides the semicircular canals",
+      "The macula produces continuous post-rotatory nystagmus"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: VOR is short-lived (<1 minute). In the light, as VOR decays, the visual system detects continuous retinal slip across the entire field; the Optokinetic System (OKN) takes over and sustains nystagmus in the same direction for as long as rotation continues."
+  },
+  {
+    q: "A subject is seated stationary inside a full-field striped room that begins rotating clockwise to the subject's right. What are the characteristics of the resulting Optokinetic Nystagmus (OKN)?",
+    options: [
+      "Slow tracking drift to the left; fast phase to the left",
+      "Slow tracking drift to the right; fast phase to the left (opposite room rotation)",
+      "Fast phase to the right; slow phase to the right",
+      "No nystagmus occurs because the subject's body is not physically rotating"
+    ],
+    answer: 1, // B
+    explanation: "B is correct: When the room rotates to the right, eyes pursue the moving stripes to the right (slow tracking drift). At the orbital limit, a rapid reset saccade snaps the eyes to the left. The fast phase (by which nystagmus is named) is OPPOSITE to the room rotation (left-beating)."
+  },
+  {
+    q: "Why does viewing a handheld rotating OKN drum NOT induce circular vection (illusion of self-motion) or OKAN?",
+    options: [
+      "The drum stripes move too fast for smooth pursuit",
+      "Drums stimulate the macula rather than the crista ampullaris",
+      "The drum occupies only a small central portion of the visual field while the stationary room anchors perception",
+      "The drum activates the otoliths instead of semicircular canals"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: Circular vection and Optokinetic After-Nystagmus (OKAN) require whole-field or large-field visual stimulation that engages the subcortical velocity storage system. A small handheld drum leaves the surrounding stationary room visible, which provides an earth-fixed reference preventing illusory self-rotation and OKAN."
+  },
+  {
+    q: "What is Optokinetic After-Nystagmus (OKAN), and what is its direction relative to the preceding OKN?",
+    options: [
+      "A reversal of nystagmus caused by vestibular fluid shift; opposite direction of OKN",
+      "A nystagmus that occurs only in complete daylight; opposite direction of OKN",
+      "A persistent post-stimulus nystagmus discharged by velocity storage in darkness; same direction as the original OKN",
+      "A pathological jerk nystagmus caused by cerebellar infarction"
+    ],
+    answer: 2, // C
+    explanation: "C is correct: OKAN is the perseveration of nystagmus that continues after lights are extinguished following sustained OKN. It is mediated by velocity storage discharge in the vestibular nuclei/commissure. Like momentum, OKAN is always in the SAME direction as the preceding OKN fast phase."
+  },
+  {
+    q: "A person spins in a chair to the right in a lit room for 3 minutes, and then the chair is suddenly brought to a complete stop while the room lights remain ON. Why does post-rotatory nystagmus NOT manifest prominently?",
+    options: [
+      "Visual fixation on stationary surroundings quickly suppresses and cancels the post-rotatory vestibular drive ('visual dumping')",
+      "The cupula remains deflected permanently in the spin direction",
+      "The saccule overrides the semicircular canals to stop all ocular motion",
+      "Endolymph freezes instantly upon deceleration"
+    ],
+    answer: 0, // A
+    explanation: "A is correct: In light, viewing stationary scenery immediately engages visual fixation and visual dumping, and transient OKAN acts in opposition to Post-Rotary Vestibular Nystagmus (PVN). Consequently, post-rotatory nystagmus is rapidly abolished/suppressed."
+  },
+  {
+    q: "A patient spins to the right in a chair in total darkness for 2 minutes and is then abruptly stopped (still in total darkness). What occurs immediately upon stopping?",
+    options: [
+      "No eye movement occurs because no visual targets exist in darkness",
+      "Rotatory vestibular nystagmus continues beating to the right for 5 minutes",
+      "OKAN appears beating to the right",
+      "Post-rotatory vestibular nystagmus beats to the LEFT (opposite the spin direction)"
+    ],
+    answer: 3, // D
+    explanation: "D is correct: Stopping the chair causes endolymph to slam forward against the cupula in the opposite direction (like coffee sloshing when braking a car). In total darkness without visual suppression or OKAN, this evokes vigorous Post-Rotatory Vestibular Nystagmus (PVN) beating OPPOSITE to the original spin direction (i.e., beating to the left)."
+  }
+];
+
+function buildQuiz() {
+  const container = document.getElementById("quiz-container");
+  container.innerHTML = "";
+
+  quizData.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.id = `q-card-${index}`;
+
+    const questionHeader = document.createElement("div");
+    questionHeader.className = "card-header";
+    questionHeader.innerHTML = `<span class="q-number">${index + 1}.</span> ${item.q}`;
+    card.appendChild(questionHeader);
+
+    const optionsBox = document.createElement("div");
+    optionsBox.className = "options";
+
+    const letters = ["A", "B", "C", "D"];
+    item.options.forEach((optText, optIdx) => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.id = `btn-${index}-${optIdx}`;
+      btn.innerHTML = `<span class="option-letter">${letters[optIdx]}.</span> <span>${optText}</span>`;
+      btn.onclick = () => selectOption(index, optIdx);
+      optionsBox.appendChild(btn);
+    });
+
+    card.appendChild(optionsBox);
+
+    const explanation = document.createElement("div");
+    explanation.className = "explanation-box";
+    explanation.id = `expl-${index}`;
+    card.appendChild(explanation);
+
+    container.appendChild(card);
+  });
+}
+
+const userState = new Array(quizData.length).fill(null);
+
+function selectOption(qIdx, choiceIdx) {
+  if (userState[qIdx] !== null) return; // already answered
+
+  userState[qIdx] = choiceIdx;
+  const correctIdx = quizData[qIdx].answer;
+  const isCorrect = (choiceIdx === correctIdx);
+
+  // Disable buttons in this card
+  for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById(`btn-${qIdx}-${i}`);
+    btn.disabled = true;
+    if (i === choiceIdx) {
+      btn.classList.add(isCorrect ? "selected-correct" : "selected-incorrect");
+    }
+    if (!isCorrect && i === correctIdx) {
+      btn.classList.add("correct-reveal");
+    }
+  }
+
+  // Show explanation
+  const explBox = document.getElementById(`expl-${qIdx}`);
+  explBox.className = `explanation-box ${isCorrect ? "correct" : "incorrect"}`;
+  explBox.innerHTML = `<strong>${isCorrect ? "✓ Correct!" : "✗ Incorrect"}</strong>${quizData[qIdx].explanation}`;
+
+  updateScoreboard();
+}
+
+function updateScoreboard() {
+  const answered = userState.filter(v => v !== null).length;
+  let correct = 0;
+  userState.forEach((val, idx) => {
+    if (val === quizData[idx].answer) correct++;
+  });
+
+  document.getElementById("answered-count").innerText = answered;
+  document.getElementById("correct-count").innerText = correct;
+  const percent = answered === 0 ? 0 : Math.round((correct / answered) * 100);
+  document.getElementById("score-display").innerText = percent;
+}
+
+function resetQuiz() {
+  userState.fill(null);
+  buildQuiz();
+  updateScoreboard();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// Initial build
+buildQuiz();
+</script>
+</body>
+</html>
